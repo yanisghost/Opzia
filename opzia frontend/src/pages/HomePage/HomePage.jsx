@@ -119,23 +119,8 @@ function ProductsByCategory() {
     const fetchAllData = async () => {
       setLoading(true);
       try {
-        // Fetch categories directly
-        const response = await fetch("/api/v1/categories");
-        const rawData = await response.json();
-        
-        // Extract categories from response
-        let categoriesResponse = [];
-        if (Array.isArray(rawData?.data?.docs)) {
-          categoriesResponse = rawData.data.docs;
-        } else if (Array.isArray(rawData?.data?.categories)) {
-          categoriesResponse = rawData.data.categories;
-        } else if (Array.isArray(rawData?.categories)) {
-          categoriesResponse = rawData.categories;
-        } else if (Array.isArray(rawData?.data)) {
-          categoriesResponse = rawData.data;
-        } else if (Array.isArray(rawData)) {
-          categoriesResponse = rawData;
-        }
+        // Fetch categories using our API client service
+        const categoriesResponse = await categoryService.getCategories();
 
         if (!Array.isArray(categoriesResponse) || categoriesResponse.length === 0) {
           setLoading(false);
