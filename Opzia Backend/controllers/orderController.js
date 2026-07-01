@@ -530,6 +530,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
   // For CIB/Dahabia payment methods, we initiate a payment link with Navio
   if (['dahabia', 'cib'].includes(paymentMethod)) {
     try {
+      const frontendUrl = process.env.FRONTEND_URL || req.get('origin') || 'http://localhost:5173';
       const response = await ocpay.createLink({
         productInfo: {
           title: `Order #${order._id}`,
@@ -537,7 +538,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
           description: `Payment for Order #${order._id} on Opzia`,
         },
         feeMode: FeeMode.NO_FEE,
-        redirectUrl: `${process.env.FRONTEND_URL}/orders/${order._id}`,
+        redirectUrl: `${frontendUrl}/orders/${order._id}`,
       });
 
       const { paymentUrl, paymentRef } = response;
