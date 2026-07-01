@@ -1,0 +1,61 @@
+/* src/components/ui/Badge/Badge.module.css */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wide);
+  text-transform: capitalize;
+  white-space: nowrap;
+  line-height: 1.6;
+}
+
+/* Order status variants — colours from global.css design tokens */
+.pending {
+  background-color: var(--color-status-pending-bg);
+  color: var(--color-status-pending);
+}
+
+.confirmed {
+  background-color: var(--color-status-confirmed-bg);
+  color: var(--color-status-confirmed);
+}
+
+.shipped {
+  background-color: var(--color-status-shipped-bg);
+  color: var(--color-status-shipped);
+}
+
+.delivered {
+  background-color: var(--color-status-delivered-bg);
+  color: var(--color-status-delivered);
+}
+
+.cancelled {
+  background-color: var(--color-status-cancelled-bg);
+  color: var(--color-status-cancelled);
+}
+
+/* Generic semantic variants */
+.success {
+  background-color: var(--color-status-delivered-bg);
+  color: var(--color-success);
+}
+
+.info {
+  background-color: var(--color-status-shipped-bg);
+  color: var(--color-info);
+}
+
+.warning {
+  background-color: var(--color-status-pending-bg);
+  color: var(--color-warning);
+}
+
+.neutral {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-secondary);
+}

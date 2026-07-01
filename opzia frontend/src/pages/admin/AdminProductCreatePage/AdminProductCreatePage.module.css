@@ -1,0 +1,111 @@
+/* src/pages/admin/AdminProductCreatePage/AdminProductCreatePage.module.css */
+.page {
+  padding: var(--space-4);
+}
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-6);
+}
+.form {
+  display: grid;
+  gap: var(--space-6);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+}
+.fieldGroup {
+  display: grid;
+  gap: var(--space-2);
+}
+.label {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-primary);
+}
+.hint {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+.fullWidthField {
+  display: grid;
+  gap: var(--space-2);
+}
+.textarea {
+  width: 100%;
+  min-height: 172px;
+  resize: vertical;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-base);
+  color: var(--color-text-primary);
+  background: var(--color-surface);
+}
+.formError {
+  padding: var(--space-4);
+  color: var(--color-danger-700);
+  background: var(--color-danger-10);
+  border: 1px solid var(--color-danger-50);
+  border-radius: var(--radius-lg);
+}
+.actions {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+@media (max-width: 880px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.linkedProductsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  background: var(--color-surface);
+}
+
+.linkedProductCheckboxLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2) var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+  border-radius: var(--radius-sm);
+}
+
+.linkedProductCheckboxLabel:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.linkedProductCheckboxLabel input[type="checkbox"] {
+  accent-color: var(--color-brand);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.checkboxText {
+  color: var(--color-text-primary);
+}
+
+.noProductsText {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}

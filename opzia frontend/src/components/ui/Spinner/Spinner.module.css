@@ -1,0 +1,24 @@
+/* src/components/ui/Spinner/Spinner.module.css */
+
+.spinner {
+  display: inline-block;
+  border-radius: 50%;
+  border-style: solid;
+  border-top-color: transparent !important;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* Sizes */
+.sm  { width: 16px; height: 16px; border-width: 2px; }
+.md  { width: 28px; height: 28px; border-width: 3px; }
+.lg  { width: 44px; height: 44px; border-width: 4px; }
+
+/* Colors */
+.brand   { border-color: var(--color-brand); }
+.inherit { border-color: currentColor; }
+.white   { border-color: #fff; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

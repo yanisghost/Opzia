@@ -1,0 +1,53 @@
+/* src/components/product/QuantitySelector/QuantitySelector.module.css */
+
+.selector {
+  display: inline-flex;
+  align-items: center;
+  border: var(--border-thin);
+}
+
+.disabled { opacity: 0.5; pointer-events: none; }
+
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  user-select: none;
+  font-weight: var(--fw-light);
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.btn:hover:not(:disabled) {
+  background-color: var(--color-bg-secondary);
+}
+
+.btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-primary);
+  user-select: none;
+  border-left: var(--border-thin);
+  border-right: var(--border-thin);
+}
+
+/* Sizes */
+.sm .btn   { width: 28px; height: 28px; font-size: var(--text-base); }
+.sm .value { width: 32px; height: 28px; font-size: var(--text-xs); }
+
+.md .btn   { width: 36px; height: 36px; font-size: var(--text-lg); }
+.md .value { width: 40px; height: 36px; }
+
+.lg .btn   { width: 44px; height: 44px; font-size: var(--text-xl); }
+.lg .value { width: 48px; height: 44px; font-size: var(--text-base); }

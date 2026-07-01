@@ -1,0 +1,46 @@
+/* src/components/admin/KPICard/KPICard.module.css */
+
+.card {
+  background-color: var(--color-bg-card);
+  border: var(--border-thin);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.label {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.trend {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+}
+.positive { color: var(--color-success); }
+.negative { color: var(--color-error); }
+
+.value {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--fw-light);
+  color: var(--color-text-primary);
+  line-height: 1;
+}
+
+.trendLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}

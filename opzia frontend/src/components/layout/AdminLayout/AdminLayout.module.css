@@ -1,0 +1,55 @@
+/* src/components/layout/AdminLayout/AdminLayout.module.css */
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg-admin);
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* prevent content from overflowing */
+  margin-left: var(--admin-sidebar-width);
+}
+
+.main {
+  flex: 1;
+  padding: var(--space-8) var(--space-10);
+  overflow-y: auto;
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: calc(var(--z-overlay) - 1);
+}
+
+/* ── Responsive: collapse sidebar on tablet ── */
+@media (max-width: 1024px) {
+  .content {
+    margin-left: 0;
+  }
+  .main {
+    padding: var(--space-4) var(--space-6);
+  }
+}
+
+/* ── RTL Overrides ── */
+[dir="rtl"] .content {
+  margin-left: 0;
+  margin-right: var(--admin-sidebar-width);
+}
+
+@media (max-width: 1024px) {
+  [dir="rtl"] .content {
+    margin-right: 0;
+  }
+}
+

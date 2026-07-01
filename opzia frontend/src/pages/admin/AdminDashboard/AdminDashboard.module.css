@@ -1,0 +1,146 @@
+/* src/pages/admin/AdminDashboard/AdminDashboard.module.css */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.loadingWrap {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-20);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: var(--fw-light);
+  color: var(--color-text-primary);
+  margin-bottom: var(--space-1);
+}
+
+.subtitle {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+/* KPI grid — 4 equal columns */
+.kpiGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+}
+
+/* Middle row — 3 columns */
+.middleGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--space-4);
+}
+
+/* Bottom row — orders (wider) + low stock */
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-4);
+}
+
+/* Widget card */
+.widget {
+  background-color: var(--color-bg-card);
+  border: var(--border-thin);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.widgetTitle {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--ls-wide);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-thin);
+}
+
+.widgetHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: calc(-1 * var(--space-1));
+}
+
+.viewAllLink {
+  font-size: var(--text-xs);
+  color: var(--color-brand);
+  text-decoration: none;
+  letter-spacing: var(--ls-wide);
+  transition: opacity var(--transition-fast);
+}
+.viewAllLink:hover { opacity: 0.7; }
+
+/* Order status bars */
+.statusBars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.statusBar {
+  display: grid;
+  grid-template-columns: 80px 1fr 36px;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.statusLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+.barTrack {
+  height: 6px;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.barFill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+}
+
+/* Status colours */
+.delivered { background-color: var(--color-status-delivered); }
+.shipped   { background-color: var(--color-status-shipped); }
+.confirmed { background-color: var(--color-status-confirmed); }
+.pending   { background-color: var(--color-status-pending); }
+.cancelled { background-color: var(--color-status-cancelled); }
+
+.statusPct {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+/* Responsive */
+@media (max-width: 1200px) {
+  .kpiGrid    { grid-template-columns: repeat(2, 1fr); }
+  .middleGrid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .kpiGrid    { grid-template-columns: 1fr; }
+  .middleGrid { grid-template-columns: 1fr; }
+  .bottomGrid { grid-template-columns: 1fr; }
+}

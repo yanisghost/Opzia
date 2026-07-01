@@ -1,0 +1,52 @@
+/* src/components/ui/Accordion/Accordion.module.css */
+
+.accordion {
+  border-top: var(--border-thin);
+}
+
+.accordion:last-child {
+  border-bottom: var(--border-thin);
+}
+
+.trigger {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) 0;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  gap: var(--space-4);
+}
+
+.triggerLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+}
+
+.chevron {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-muted);
+  flex-shrink: 0;
+  transition: transform var(--transition-base);
+}
+
+.open .chevron {
+  transform: rotate(180deg);
+}
+
+.content {
+  overflow: hidden;
+}
+
+.inner {
+  padding-bottom: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--lh-relaxed);
+}

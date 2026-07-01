@@ -1,0 +1,262 @@
+/* src/pages/PackDetailsPage/PackDetailsPage.module.css */
+
+.page {
+  padding-bottom: var(--space-20);
+}
+
+.inner {
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-8) var(--container-padding) 0;
+}
+
+/* Loading/Error states */
+.stateWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: var(--space-6);
+}
+
+.errorText {
+  font-size: var(--text-base);
+  color: var(--color-text-secondary);
+}
+
+.backLink {
+  font-size: var(--text-sm);
+  color: var(--color-brand);
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Two-column layout */
+.packLayout {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: var(--space-16);
+  margin-top: var(--space-6);
+  padding-bottom: var(--space-16);
+  border-bottom: var(--border-thin);
+}
+
+.galleryCol {
+  position: sticky;
+  top: calc(var(--navbar-height) + var(--space-4));
+  align-self: start;
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Savings Percent Badge */
+.badge {
+  position: absolute;
+  top: var(--space-4);
+  left: var(--space-4);
+  background-color: var(--color-brand);
+  color: var(--color-text-inverse);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold);
+  text-transform: uppercase;
+  padding: var(--space-2) var(--space-4);
+  letter-spacing: 0.05em;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-xs);
+}
+
+/* Info Column details */
+.infoCol {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.eyebrow {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-widest);
+  color: var(--color-brand);
+  text-transform: uppercase;
+}
+
+.packName {
+  font-family: var(--font-display);
+  font-size: var(--text-3xl);
+  font-weight: var(--fw-light);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  color: var(--color-text-primary);
+  margin-top: var(--space-2);
+}
+
+/* Pricing section */
+.pricingSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-bottom: var(--space-4);
+  border-bottom: var(--border-thin);
+}
+
+.pricing {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+}
+
+.price {
+  font-size: var(--text-2xl);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-primary);
+}
+
+.originalPrice {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  text-decoration: line-through;
+}
+
+.savingsTag {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-brand);
+}
+
+/* Description block */
+.descriptionBlock {
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-secondary);
+  font-size: var(--text-sm);
+}
+
+/* Product breakdown section */
+.contentsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.sectionTitle {
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-primary);
+  font-weight: var(--fw-semibold);
+}
+
+.productsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.productRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3);
+  border: var(--border-thin);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-bg-secondary);
+  transition: border-color var(--transition-fast);
+}
+
+.productRow:hover {
+  border-color: var(--color-brand);
+}
+
+.productThumbnail {
+  width: 54px;
+  height: 54px;
+  object-fit: cover;
+  border-radius: var(--radius-xs);
+  background-color: var(--color-bg-tertiary);
+}
+
+.productDetails {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 2px;
+}
+
+.productLink {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-primary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.productLink:hover {
+  color: var(--color-brand);
+}
+
+.productQty {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.productPriceCol {
+  text-align: right;
+}
+
+.individualPrice {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+}
+
+/* Action buy panel block */
+.actionBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: var(--border-thin);
+}
+
+.qtyRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.qtyLabel {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+}
+
+.submitBtn {
+  width: 100%;
+}
+
+/* Responsive constraints */
+@media (max-width: 991px) {
+  .packLayout {
+    grid-template-columns: 1fr;
+    gap: var(--space-10);
+  }
+
+  .galleryCol {
+    position: static;
+  }
+}

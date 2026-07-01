@@ -1,0 +1,233 @@
+/* src/components/product/ImageGallery/ImageGallery.module.css */
+
+.gallery {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+}
+
+/* ── Thumbnail Strip ── */
+.thumbnails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex-shrink: 0;
+}
+
+.thumb {
+  width: 80px;
+  height: 80px;
+  border: 2px solid transparent;
+  background: var(--color-bg-secondary);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+  padding: 0;
+}
+
+.thumbActive {
+  border-color: var(--color-brand);
+}
+
+.thumb:hover:not(.thumbActive) {
+  border-color: var(--color-border);
+}
+
+.thumbImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ── Main Image ── */
+.mainWrap {
+  position: relative;
+  flex: 1;
+  background-color: var(--color-bg-secondary);
+  overflow: hidden;
+  aspect-ratio: 1;
+}
+
+.mainImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: fadeImage 0.25s ease;
+  transition: filter var(--transition-base);
+}
+
+.dimmed {
+  filter: grayscale(0.5) opacity(0.8);
+}
+
+.soldOutOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(245, 243, 239, 0.7);
+  backdrop-filter: blur(1px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.soldOutText {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-primary);
+  letter-spacing: var(--ls-widest);
+  border-top: 1px solid var(--color-text-primary);
+  border-bottom: 1px solid var(--color-text-primary);
+  padding: var(--space-2) var(--space-6);
+  text-transform: uppercase;
+}
+
+@keyframes fadeImage {
+  from { opacity: 0.6; }
+  to   { opacity: 1; }
+}
+
+/* ── Fullscreen Zoom Lightbox Modal ── */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background-color: rgba(20, 19, 18, 0.9);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease;
+  user-select: none;
+}
+
+.closeBtn {
+  position: absolute;
+  top: var(--space-6);
+  right: var(--space-6);
+  background: none;
+  border: none;
+  color: var(--color-bg-primary);
+  font-size: var(--text-3xl);
+  cursor: pointer;
+  z-index: 2010;
+  transition: transform var(--transition-fast), color var(--transition-fast);
+}
+
+.closeBtn:hover {
+  transform: scale(1.1);
+  color: var(--color-brand);
+}
+
+.arrowLeft,
+.arrowRight {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-bg-primary);
+  font-size: 4rem;
+  font-weight: var(--fw-light);
+  cursor: pointer;
+  padding: var(--space-4);
+  z-index: 2010;
+  transition: transform var(--transition-fast), color var(--transition-fast);
+}
+
+.arrowLeft:hover {
+  color: var(--color-brand);
+  transform: translateY(-50%) scale(1.1) translateX(-4px);
+}
+
+.arrowRight:hover {
+  color: var(--color-brand);
+  transform: translateY(-50%) scale(1.1) translateX(4px);
+}
+
+.arrowLeft {
+  left: var(--space-6);
+}
+
+.arrowRight {
+  right: var(--space-6);
+}
+
+.lightboxImageWrap {
+  width: 75vw;
+  height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.lightboxImage {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  transition: transform 0.12s ease-out;
+  cursor: zoom-in;
+  will-change: transform, transform-origin;
+}
+
+.magnified {
+  transform: scale(2.2);
+  cursor: zoom-out;
+}
+
+.lightboxThumbs {
+  position: absolute;
+  bottom: var(--space-6);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: var(--space-3);
+  z-index: 2010;
+}
+
+.lightboxThumb {
+  width: 64px;
+  height: 64px;
+  border: 2px solid transparent;
+  background-color: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+  padding: 0;
+}
+
+.lightboxThumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lightboxThumbActive {
+  border-color: var(--color-brand);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ── Responsive ── */
+@media (max-width: 640px) {
+  .gallery {
+    flex-direction: column-reverse;
+  }
+
+  .thumbnails {
+    flex-direction: row;
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: var(--space-1);
+  }
+
+  .thumb {
+    flex-shrink: 0;
+  }
+}

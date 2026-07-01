@@ -1,0 +1,80 @@
+/* src/components/common/PromoCodeInput/PromoCodeInput.module.css */
+
+.wrapper { width: 100%; }
+
+.inputRow {
+  display: flex;
+  border: var(--border-thin);
+}
+
+.input {
+  flex: 1;
+  padding: var(--space-3) var(--space-4);
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
+  letter-spacing: var(--ls-wider);
+}
+
+.input::placeholder {
+  color: var(--color-text-muted);
+  letter-spacing: var(--ls-normal);
+}
+
+.applyBtn {
+  padding: var(--space-3) var(--space-5);
+  background: transparent;
+  border: none;
+  border-left: var(--border-thin);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--ls-wider);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.applyBtn:hover:not(:disabled) {
+  background-color: var(--color-brand);
+  color: var(--color-text-inverse);
+}
+
+.applyBtn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Applied state */
+.applied {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-status-confirmed-bg);
+  border: 1px solid var(--color-success);
+}
+
+.appliedCode {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wider);
+  color: var(--color-success);
+}
+
+.appliedNote {
+  flex: 1;
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+.removeBtn {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  padding: var(--space-1);
+  transition: color var(--transition-fast);
+}
+.removeBtn:hover { color: var(--color-error); }

@@ -1,0 +1,27 @@
+/* src/components/product/StarRating/StarRating.module.css */
+
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.star {
+  flex-shrink: 0;
+}
+
+/* Sizes */
+.sm .star { width: 12px; height: 12px; }
+.md .star { width: 16px; height: 16px; }
+.lg .star { width: 20px; height: 20px; }
+
+.count {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}

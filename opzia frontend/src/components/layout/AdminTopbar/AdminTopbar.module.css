@@ -1,0 +1,236 @@
+/* src/components/layout/AdminTopbar/AdminTopbar.module.css */
+
+.topbar {
+  display: none;
+  background-color: var(--color-bg-primary);
+  border-bottom: var(--border-thin);
+  padding: 0 var(--space-4);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-xs);
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.menuBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-text-primary);
+  padding: var(--space-1);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: background-color var(--transition-fast);
+}
+
+.menuBtn:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+}
+
+.logoImg {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  /* Invert if background is off-white */
+  filter: invert(1) contrast(2);
+}
+
+.brandName {
+  font-family: var(--font-display);
+  font-size: var(--text-md);
+  font-weight: var(--fw-medium);
+  color: var(--color-brand);
+  letter-spacing: var(--ls-wide);
+}
+
+.right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.storefrontBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  color: var(--color-brand);
+  font-size: var(--text-xs);
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+  border: var(--border-brand);
+  transition: all var(--transition-fast);
+}
+
+.storefrontBtn:hover {
+  background-color: var(--color-brand);
+  color: var(--color-text-inverse);
+}
+
+.storefrontLabel {
+  display: inline;
+}
+
+.userContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.userName {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-primary);
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-md);
+  color: var(--color-text-muted);
+  border: none;
+  background: none;
+  cursor: pointer;
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.logoutBtn:hover {
+  color: var(--color-error);
+  background-color: var(--color-status-cancelled-bg);
+}
+
+/* ── Responsive breakpoints ── */
+@media (max-width: 1024px) {
+  .topbar {
+    display: flex;
+  }
+}
+
+@media (max-width: 480px) {
+  .brandName {
+    display: none; /* Hide brand name on very small phones to save space */
+  }
+  
+  .storefrontLabel {
+    display: none; /* Only show home icon on small phones */
+  }
+  
+  .storefrontBtn {
+    padding: var(--space-2);
+  }
+}
+
+/* ── Language Picker ── */
+.langPickerContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.langBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+  background: none;
+  border: none;
+  cursor: pointer;
+  height: 32px;
+  padding-inline: var(--space-2);
+  gap: var(--space-1);
+  transition: color var(--transition-fast), background-color var(--transition-fast);
+}
+
+.langBtn:hover {
+  color: var(--color-brand);
+  background-color: var(--color-bg-secondary);
+}
+
+.langCode {
+  font-size: 11px;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-normal);
+  color: var(--color-text-secondary);
+}
+
+.langDropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: var(--space-2);
+  background-color: var(--color-bg-card);
+  border: var(--border-thin);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  list-style: none;
+  padding: var(--space-2) 0;
+  min-width: 120px;
+  z-index: var(--z-dropdown);
+  animation: fadeIn var(--transition-fast) forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.langOption {
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  text-align: left;
+  background: none;
+  border: none;
+  font-size: var(--text-sm);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  transition: background-color var(--transition-fast), color var(--transition-fast);
+}
+
+.langOption:hover {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-brand);
+}
+
+.langOptionActive {
+  font-weight: var(--fw-semibold);
+  color: var(--color-brand);
+  background-color: var(--color-bg-secondary);
+}
+
+/* ── RTL Overrides ── */
+[dir="rtl"] .langDropdown {
+  right: auto;
+  left: 0;
+}
+
+[dir="rtl"] .langOption {
+  text-align: right;
+}
+

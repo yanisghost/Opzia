@@ -1,0 +1,86 @@
+/* src/pages/admin/AdminOrderDetailPage/AdminOrderDetailPage.module.css */
+
+.page {
+  padding: var(--space-4);
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.backIcon {
+  margin-right: var(--space-2);
+  vertical-align: middle;
+}
+
+.pageTitle {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.invoiceWrap {
+  margin-top: var(--space-2);
+}
+
+/* Loading & Empty placeholders */
+.loadingWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-12);
+  gap: var(--space-3);
+  color: var(--color-text-secondary);
+}
+
+.empty {
+  padding: var(--space-10);
+  text-align: center;
+  color: var(--color-text-secondary);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+
+/* Error Alert box */
+.error {
+  padding: var(--space-5);
+  border: 1px solid var(--color-danger-50);
+  background: var(--color-danger-10);
+  color: var(--color-danger-700);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: 500px;
+  margin: var(--space-4) 0;
+}
+
+.errorLink {
+  color: var(--color-primary, #6366f1);
+  font-weight: var(--fw-semibold);
+  text-decoration: underline;
+}
+
+.errorLink:hover {
+  color: var(--color-primary-hover, #4f46e5);
+}
+
+/* ==========================================================================
+   PRINTER SPECIFIC STYLES - Hides header row and error states
+   ========================================================================== */
+@media print {
+  .noPrint {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}

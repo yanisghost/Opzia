@@ -1,0 +1,75 @@
+/* src/components/admin/TopProductsList/TopProductsList.module.css */
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.rank {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-muted);
+  width: 18px;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.image {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  background-color: var(--color-bg-secondary);
+  flex-shrink: 0;
+}
+
+.info {
+  flex: 1;
+  min-width: 0;
+}
+
+.name {
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.category {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  letter-spacing: var(--ls-wide);
+}
+
+.stats {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+}
+
+.sold {
+  font-size: var(--text-base);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+}
+
+.soldLabel {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  letter-spacing: var(--ls-wide);
+}
+
+.empty {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
