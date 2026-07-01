@@ -21,10 +21,13 @@ const discountRoutes = require('./routes/discountRoutes');
 const viewRoutes = require('./routes/viewRoutes');
 const webhookRoutes = require('./routes/webhookRoutes');
 const shippingRoutes = require('./routes/shippingRoutes');
-// Controllers
+const cors = require('cors');
 const checkoutController = require('./controllers/checkoutController');
 
 const app = express();
+
+// Enable CORS
+app.use(cors());
 
 // 1) Middlewares
 app.use(
