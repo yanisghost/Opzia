@@ -173,7 +173,7 @@ function OrderInvoice({ order: initialOrder, onStatusUpdated, onClose }) {
         <div className={styles.panelRight}>
             {/* Shipping action buttons */}
             {!order.yalidineTracking && !order.shipping?.trackingNumber && ['confirmed', 'shipped'].includes(order.status) && (
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div className={styles.shippingActionsGroup}>
                 <select
                   value={selectedProvider}
                   onChange={(e) => setSelectedProvider(e.target.value)}
