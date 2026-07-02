@@ -14,12 +14,6 @@
   margin-left: var(--admin-sidebar-width);
 }
 
-.main {
-  flex: 1;
-  padding: var(--space-8) var(--space-10);
-  overflow-y: auto;
-}
-
 .backdrop {
   position: fixed;
   top: 0;
@@ -31,13 +25,35 @@
   z-index: calc(var(--z-overlay) - 1);
 }
 
-/* ── Responsive: collapse sidebar on tablet ── */
+.main {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Direct child page responsive padding overrides */
+.main > * {
+  padding: var(--space-6) var(--space-8) !important;
+}
+
+/* ── Responsive layout rules ── */
 @media (max-width: 1024px) {
   .content {
     margin-left: 0;
   }
-  .main {
-    padding: var(--space-4) var(--space-6);
+  .main > * {
+    padding: var(--space-4) var(--space-6) !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .main > * {
+    padding: var(--space-3) var(--space-4) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .main > * {
+    padding: var(--space-2) var(--space-2) !important;
   }
 }
 

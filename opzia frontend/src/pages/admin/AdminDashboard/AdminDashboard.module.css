@@ -137,10 +137,16 @@
 @media (max-width: 1200px) {
   .kpiGrid    { grid-template-columns: repeat(2, 1fr); }
   .middleGrid { grid-template-columns: 1fr 1fr; }
+  .middleGrid > :last-child {
+    grid-column: span 2;
+  }
 }
 
 @media (max-width: 768px) {
   .kpiGrid    { grid-template-columns: 1fr; }
   .middleGrid { grid-template-columns: 1fr; }
+  .middleGrid > :last-child {
+    grid-column: span 1;
+  }
   .bottomGrid { grid-template-columns: 1fr; }
 }

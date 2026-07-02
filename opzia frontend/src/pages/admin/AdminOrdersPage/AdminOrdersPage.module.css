@@ -220,6 +220,7 @@
 /* Row elements */
 .idCell {
   width: 120px;
+  white-space: nowrap;
 }
 
 .idButton {
@@ -249,6 +250,7 @@
 .dateCell {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
+  white-space: nowrap;
 }
 
 .customerName {
@@ -286,6 +288,7 @@
   font-weight: var(--fw-bold, 700);
   font-size: var(--text-sm);
   color: var(--color-text-primary);
+  white-space: nowrap;
 }
 
 .actionGroup {
