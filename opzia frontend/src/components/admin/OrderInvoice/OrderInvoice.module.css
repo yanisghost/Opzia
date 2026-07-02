@@ -81,6 +81,7 @@
 .panelRight {
   display: flex;
   gap: var(--space-3);
+  flex-wrap: wrap;
 }
 
 .btnIcon {
@@ -483,7 +484,15 @@
   }
   
   .panelRight {
-    justify-content: flex-end;
+    justify-content: stretch;
+    width: 100%;
+    gap: var(--space-2);
+  }
+
+  .panelRight button {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
   }
   
   .header {
@@ -511,6 +520,21 @@
   
   .totalsContent {
     max-width: 100%;
+  }
+
+  .invoiceTable {
+    min-width: 500px;
+  }
+}
+
+@media (max-width: 480px) {
+  .invoiceSheet {
+    padding: var(--space-3) var(--space-2);
+  }
+  .panelRight button {
+    padding: var(--space-2) var(--space-1);
+    font-size: var(--text-xs);
+    min-width: 100px;
   }
 }
 
