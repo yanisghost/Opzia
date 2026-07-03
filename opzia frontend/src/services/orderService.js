@@ -109,6 +109,14 @@ export const orderService = {
   },
 
   /**
+   * Track order details by ID (public).
+   */
+  async trackOrderById(id) {
+    const res = await apiClient.get(`${BASE}/${id}/track`);
+    return unwrapOrderResponse(res.data);
+  },
+
+  /**
    * Validate order coupon promo code.
    */
   async validateCoupon(code, subtotal) {

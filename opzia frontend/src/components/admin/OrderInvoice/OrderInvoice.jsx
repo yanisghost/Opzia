@@ -21,16 +21,6 @@ function OrderInvoice({ order: initialOrder, onStatusUpdated, onClose }) {
   const [order, setOrder]                   = useState(initialOrder);
 
   const qrValue = useMemo(() => {
-    const trackingCode = order?.shipping?.trackingNumber || order?.yalidineTracking;
-    const provider = order?.shipping?.provider || 'yalidine';
-
-    if (trackingCode) {
-      if (provider === 'yalidine') {
-        return `https://yalidine.com/tracking/?num=${trackingCode}`;
-      }
-      return trackingCode;
-    }
-
     const baseUrl = window.location.origin || 'https://opzia.com';
     return `${baseUrl}/orders/${order?._id || order?.id}`;
   }, [order]);

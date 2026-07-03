@@ -5,12 +5,16 @@ import { useParams, Link } from 'react-router-dom';
 import { orderService } from '@services/orderService';
 import Button from '@components/ui/Button/Button';
 import Spinner from '@components/ui/Spinner/Spinner';
+import Badge from '@components/ui/Badge/Badge';
+import { formatPrice } from '@utils/formatPrice';
+import { formatDate } from '@utils/formatDate';
 import styles from './OrderStatusPage.module.css';
 
 function OrderStatusPage() {
   const { id } = useParams();
-  const [status, setStatus] = useState('loading'); // 'loading', 'confirmed', 'failed', 'pending'
+  const [status, setStatus] = useState('loading'); // 'loading', 'confirmed', 'failed', 'pending', 'error'
   const [errorMsg, setErrorMsg] = useState('');
+  const [order, setOrder] = useState(null);
   const [retryCount, setRetryCount] = useState(0);
 
   const fetchStatus = async () => {
@@ -19,18 +23,34 @@ function OrderStatusPage() {
       const { orderStatus, navioStatus } = response.data;
 
       if (orderStatus === 'confirmed') {
+        const fullOrder = await orderService.trackOrderById(id);
+        setOrder(fullOrder);
         setStatus('confirmed');
       } else if (orderStatus === 'cancelled') {
         setStatus('failed');
       } else if (navioStatus === 'PENDING') {
         setStatus('pending');
       } else {
-        setStatus('pending');
+        // Fallback for Cash on Delivery / pending orders
+        try {
+          const fullOrder = await orderService.trackOrderById(id);
+          setOrder(fullOrder);
+          setStatus('confirmed');
+        } catch (err) {
+          setStatus('pending');
+        }
       }
     } catch (err) {
       console.error('Error fetching payment status:', err);
-      setErrorMsg(err.message || 'Failed to check payment status.');
-      setStatus('error');
+      // Fallback: try loading details directly (e.g. public link lookup)
+      try {
+        const fullOrder = await orderService.trackOrderById(id);
+        setOrder(fullOrder);
+        setStatus('confirmed');
+      } catch (trackErr) {
+        setErrorMsg(err.message || 'Failed to retrieve order status.');
+        setStatus('error');
+      }
     }
   };
 
@@ -38,7 +58,6 @@ function OrderStatusPage() {
     fetchStatus();
   }, [id, retryCount]);
 
-  // Optional: Auto-poll every 5 seconds if state is pending
   useEffect(() => {
     if (status !== 'pending') return;
 
@@ -54,47 +73,24 @@ function OrderStatusPage() {
     setRetryCount(prev => prev + 1);
   };
 
-  return (
-    <div className={styles.page}>
-      <div className={styles.card}>
-        {status === 'loading' && (
+  if (status === 'loading') {
+    return (
+      <div className={styles.page}>
+        <div className={styles.card}>
           <div className={styles.loadingState}>
             <Spinner size="lg" />
-            <h2 className={styles.title}>Verifying Payment</h2>
-            <p className={styles.text}>We are checking your transaction status with the secure payment server. Please do not close or reload this page.</p>
+            <h2 className={styles.title}>Loading Order Details</h2>
+            <p className={styles.text}>Retrieving order information and shipping logs. Please wait...</p>
           </div>
-        )}
+        </div>
+      </div>
+    );
+  }
 
-        {status === 'confirmed' && (
-          <div className={styles.successState}>
-            <div className={styles.iconWrapSuccess}>
-              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
-                <circle cx="12" cy="12" r="10"/>
-                <polyline points="9 12 11 14 15 10"/>
-              </svg>
-            </div>
-            <h2 className={styles.titleSuccess}>Payment Confirmed!</h2>
-            <p className={styles.text}>Thank you! Your payment was successful and your order #{id} has been placed.</p>
-            
-            <div className={styles.qrStatusBox}>
-              <div className={styles.qrCodeWrapper}>
-                <QRCodeSVG value={`${window.location.origin}/orders/${id}`} size={110} />
-              </div>
-              <p className={styles.qrStatusHint}>Scan this code to save and track this order on your phone!</p>
-            </div>
-
-            <div className={styles.actions}>
-              <Link to="/shop">
-                <Button variant="primary" size="lg">Continue Shopping</Button>
-              </Link>
-              <Link to="/account/orders">
-                <Button variant="secondary" size="lg">View My Orders</Button>
-              </Link>
-            </div>
-          </div>
-        )}
-
-        {status === 'failed' && (
+  if (status === 'failed') {
+    return (
+      <div className={styles.page}>
+        <div className={styles.card}>
           <div className={styles.failedState}>
             <div className={styles.iconWrapFailed}>
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -114,9 +110,15 @@ function OrderStatusPage() {
               </Link>
             </div>
           </div>
-        )}
+        </div>
+      </div>
+    );
+  }
 
-        {status === 'pending' && (
+  if (status === 'pending') {
+    return (
+      <div className={styles.page}>
+        <div className={styles.card}>
           <div className={styles.pendingState}>
             <div className={styles.iconWrapPending}>
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -133,9 +135,15 @@ function OrderStatusPage() {
               </Link>
             </div>
           </div>
-        )}
+        </div>
+      </div>
+    );
+  }
 
-        {status === 'error' && (
+  if (status === 'error') {
+    return (
+      <div className={styles.page}>
+        <div className={styles.card}>
           <div className={styles.errorState}>
             <div className={styles.iconWrapFailed}>
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
@@ -153,7 +161,136 @@ function OrderStatusPage() {
               </Link>
             </div>
           </div>
-        )}
+        </div>
+      </div>
+    );
+  }
+
+  // --- Confirmed Order Details & Yalidine tracking timelines ---
+  const trackingCode = order?.shipping?.trackingNumber || order?.yalidineTracking;
+  const carrierName = order?.shipping?.provider === 'nord_and_back' ? 'Nord & Back' : order?.shipping?.provider === 'manual' ? 'Manual Delivery' : 'Yalidine';
+  const latestShippingStatus = order?.yalidineStatus || order?.shipping?.status || 'En préparation';
+  const history = order?.shipping?.history || [];
+  const qrValue = `${window.location.origin}/orders/${id}`;
+
+  return (
+    <div className={styles.page}>
+      <div className={styles.detailsCard}>
+        <div className={styles.detailsHeader}>
+          <div className={styles.successIcon}>✓</div>
+          <div>
+            <h1 className={styles.detailsTitle}>Order Status</h1>
+            <p className={styles.orderIdLabel}>Order ID: #{id?.toUpperCase()}</p>
+          </div>
+        </div>
+
+        <div className={styles.detailsGrid}>
+          {/* Left Column: Customer and Payment details */}
+          <div className={styles.detailsCol}>
+            <div className={styles.section}>
+              <h3 className={styles.sectionTitle}>Delivery Details</h3>
+              <p className={styles.detailText}><strong>Name:</strong> {order?.customerName}</p>
+              <p className={styles.detailText}><strong>Phone:</strong> {order?.phoneNumber}</p>
+              <p className={styles.detailText}><strong>Address:</strong> {order?.homeAddress}</p>
+              <p className={styles.detailText}><strong>Location:</strong> {order?.baladia}, {order?.wilaya}</p>
+            </div>
+
+            <div className={styles.section}>
+              <h3 className={styles.sectionTitle}>Payment Details</h3>
+              <p className={styles.detailText}>
+                <strong>Method:</strong> {order?.paymentMethod ? order.paymentMethod.toUpperCase() : 'CASH'}
+              </p>
+              <p className={styles.detailText}>
+                <strong>Total Amount:</strong> {formatPrice(order?.totalAmount)}
+              </p>
+            </div>
+
+            <div className={styles.qrTrackingSection}>
+              <div className={styles.qrCodeWrapper}>
+                <QRCodeSVG value={qrValue} size={90} />
+              </div>
+              <div className={styles.qrInfo}>
+                <h4 className={styles.qrTitle}>Scan to Track</h4>
+                <p className={styles.qrDescription}>Open this page on your phone or scan to share the tracking link.</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Column: Ordered Items and tracking timeline */}
+          <div className={styles.detailsCol}>
+            <div className={styles.section}>
+              <h3 className={styles.sectionTitle}>Products Ordered</h3>
+              <ul className={styles.itemsList}>
+                {order?.products?.map((item, idx) => (
+                  <li key={`prod-${idx}`} className={styles.itemRow}>
+                    <span>{item.name || item.productId?.name} × {item.quantity}</span>
+                    <strong>{formatPrice(item.finalPrice * item.quantity)}</strong>
+                  </li>
+                ))}
+                {order?.packs?.map((pack, idx) => (
+                  <li key={`pack-${idx}`} className={styles.itemRow}>
+                    <span>{pack.name || pack.packId?.name} (Pack) × {pack.quantity}</span>
+                    <strong>{formatPrice(pack.finalPrice * pack.quantity)}</strong>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className={styles.section}>
+              <h3 className={styles.sectionTitle}>📦 Logistics & Shipping</h3>
+              {trackingCode ? (
+                <div className={styles.shippingPanel}>
+                  <div className={styles.shippingMeta}>
+                    <p className={styles.detailText}><strong>Carrier:</strong> {carrierName}</p>
+                    <p className={styles.detailText}><strong>Tracking Code:</strong> {trackingCode}</p>
+                    <p className={styles.detailText}>
+                      <strong>Current Status:</strong>{' '}
+                      <Badge variant={order.status === 'confirmed' ? 'info' : order.status}>
+                        {latestShippingStatus}
+                      </Badge>
+                    </p>
+                  </div>
+
+                  <div className={styles.timelineContainer}>
+                    <h4 className={styles.timelineTitle}>Tracking History</h4>
+                    {history.length > 0 ? (
+                      <div className={styles.timelineList}>
+                        {history.map((step, idx) => (
+                          <div key={idx} className={styles.timelineItem}>
+                            <div className={styles.timelineMarker}></div>
+                            <div className={styles.timelineContent}>
+                              <div className={styles.stepTitleRow}>
+                                <span className={styles.stepStatus}>{step.status}</span>
+                                <span className={styles.stepTime}>{new Date(step.timestamp).toLocaleDateString()}</span>
+                              </div>
+                              {step.location && <span className={styles.stepLoc}>📍 {step.location}</span>}
+                              {step.reason && <span className={styles.stepReason}>⚠ {step.reason}</span>}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className={styles.timelineEmpty}>Parcel registered with carrier. Updates will post shortly.</p>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className={styles.preparingBox}>
+                  <p>⌛ <strong>Preparing Package</strong></p>
+                  <p className={styles.preparingSub}>
+                    We are preparing your items for delivery. A tracking code and timeline will appear here once shipped via Yalidine.
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.footerActions}>
+          <Link to="/shop">
+            <Button variant="primary" size="lg">Continue Shopping</Button>
+          </Link>
+        </div>
       </div>
     </div>
   );

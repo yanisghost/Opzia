@@ -109,7 +109,7 @@ function OrderCard({ order }) {
               <div className={styles.qrColumn}>
                 <div className={styles.qrWrapper}>
                   <QRCodeSVG 
-                    value={carrierName === 'Yalidine' ? `https://yalidine.com/tracking/?num=${trackingCode}` : trackingCode} 
+                    value={`${window.location.origin}/orders/${orderId}`} 
                     size={80} 
                   />
                 </div>

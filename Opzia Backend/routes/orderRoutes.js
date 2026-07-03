@@ -18,6 +18,7 @@ const orderCreationLimiter = rateLimit({
 router.route('/').post(orderCreationLimiter, authController.isLoggedIn, orderController.createOrder);
 router.get('/my-orders', authController.protect, orderController.getMyOrders);
 router.get('/:id/check-payment', orderController.checkPaymentStatus);
+router.get('/:id/track', orderController.trackOrderById);
 
 // Shipping fee calculator (no auth required — called at checkout)
 router.get('/shipping-fee', orderController.getShippingFee);

@@ -804,3 +804,22 @@ exports.trackByPhone = catchAsync(async (req, res, next) => {
     data: { orders: safeOrders },
   });
 });
+
+exports.trackOrderById = catchAsync(async (req, res, next) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return next(new AppError('No order found with that ID', 404));
+  }
+
+  // Remove sensitive profit field
+  const publicOrder = order.toObject();
+  delete publicOrder.totalProfit;
+
+  res.status(200).json({
+    status: 'success',
+    data: {
+      order: publicOrder,
+    },
+  });
+});
