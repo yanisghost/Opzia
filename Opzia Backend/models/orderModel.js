@@ -146,8 +146,8 @@ orderSchema.pre('save', function () {
     ? this.packs.reduce((sum, pack) => sum + (pack.profit || 0), 0)
     : 0;
 
-  this.totalAmount = productAmount + packAmount + (this.shippingFee || 0);
-  this.totalProfit = productProfit + packProfit;
+  this.totalAmount = productAmount + packAmount + (this.shippingFee || 0) - (this.couponDiscount || 0);
+  this.totalProfit = Math.max(0, productProfit + packProfit - (this.couponDiscount || 0));
   this.updatedAt = Date.now();
 });
 
@@ -210,8 +210,8 @@ orderSchema.pre(/^findOneAndUpdate$/, async function () {
           0,
         );
 
-        const totalAmount = productAmount + packAmount + (docToUpdate.shippingFee || 0);
-        const totalProfit = productProfit + packProfit;
+        const totalAmount = productAmount + packAmount + (docToUpdate.shippingFee || 0) - (docToUpdate.couponDiscount || 0);
+        const totalProfit = Math.max(0, productProfit + packProfit - (docToUpdate.couponDiscount || 0));
 
         console.log(`[Order Middleware] Recalculated totalAmount: ${totalAmount}, totalProfit: ${totalProfit}`);
 
