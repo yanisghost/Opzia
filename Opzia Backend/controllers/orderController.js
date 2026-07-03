@@ -4,6 +4,7 @@ const AppError = require('../utils/appError');
 const Order = require('../models/orderModel');
 const Product = require('../models/productModel');
 const Pack = require('../models/packModel');
+const Coupon = require('../models/couponModel');
 const sendTelegramNotification = require('../utils/telegram');
 const { OCPay, FeeMode, PaymentStatus } = require('@oneclickdz/ocpay-sdk');
 const yalidine = require('../utils/yalidine');
@@ -306,6 +307,7 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     shippingMethod,
     middleName,
     robotVerified,
+    promoCode,
   } = req.body;
 
   // 1) Honeypot validation
@@ -520,6 +522,40 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     orderProducts.reduce((sum, p) => sum + p.profit, 0) +
     orderPacks.reduce((sum, p) => sum + p.profit, 0);
 
+  // Validate and apply promo code if provided
+  let couponDiscount = 0;
+  let couponDoc = null;
+
+  if (promoCode) {
+    const coupon = await Coupon.findOne({ code: promoCode.toUpperCase(), active: true });
+    if (coupon) {
+      const now = new Date();
+      const isStarted = !coupon.startDate || now >= coupon.startDate;
+      const isNotExpired = !coupon.endDate || now <= coupon.endDate;
+      const isUnderLimit = !coupon.maxUses || coupon.usesCount < coupon.maxUses;
+      const hasMinSpend = !coupon.minOrderAmount || totalAmount >= coupon.minOrderAmount;
+
+      if (isStarted && isNotExpired && isUnderLimit && hasMinSpend) {
+        couponDoc = coupon;
+        if (coupon.discountType === 'percent') {
+          couponDiscount = (totalAmount * coupon.value) / 100;
+        } else {
+          couponDiscount = coupon.value;
+        }
+        if (couponDiscount > totalAmount) {
+          couponDiscount = totalAmount;
+        }
+      } else {
+        return next(new AppError('The promo code is invalid, expired, or has reached its usage limit.', 400));
+      }
+    } else {
+      return next(new AppError('Invalid promo code.', 400));
+    }
+  }
+
+  const finalTotalAmount = totalAmount - couponDiscount;
+  const finalTotalProfit = Math.max(0, totalProfit - couponDiscount);
+
   // Save order
   const order = await Order.create({
     user: req.user ? req.user._id : undefined,
@@ -533,9 +569,17 @@ exports.createOrder = catchAsync(async (req, res, next) => {
     shippingMethod: shippingMethod || 'home',
     products: orderProducts,
     packs: orderPacks,
-    totalAmount,
-    totalProfit,
+    totalAmount: finalTotalAmount,
+    totalProfit: finalTotalProfit,
+    couponCode: couponDoc ? couponDoc.code : undefined,
+    couponDiscount,
   });
+
+  // Increment coupon usage count
+  if (couponDoc) {
+    couponDoc.usesCount += 1;
+    await couponDoc.save();
+  }
 
   // For CIB/Dahabia payment methods, we initiate a payment link with Navio
   if (['dahabia', 'cib'].includes(paymentMethod)) {

@@ -21,6 +21,7 @@ const discountRoutes = require('./routes/discountRoutes');
 const viewRoutes = require('./routes/viewRoutes');
 const webhookRoutes = require('./routes/webhookRoutes');
 const shippingRoutes = require('./routes/shippingRoutes');
+const couponRoutes = require('./routes/couponRoutes');
 const cors = require('cors');
 const checkoutController = require('./controllers/checkoutController');
 
@@ -107,6 +108,7 @@ app.use('/api/v1/categories', categoryRoutes);
 app.use('/api/v1/stats', statsRoutes);
 app.use('/api/v1/discounts', discountRoutes);
 app.use('/api/v1/shipping', shippingRoutes);
+app.use('/api/v1/coupons', couponRoutes);
 
 // 5) Catch-all handler
 app.use((req, res, next) => {

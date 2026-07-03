@@ -82,6 +82,9 @@ const orderSchema = new mongoose.Schema(
       type: String,
     },
 
+    couponCode: { type: String },
+    couponDiscount: { type: Number, default: 0 },
+
     // ── Yalidine / Guepex delivery fields ──────────────────────────────────
     shippingFee: { type: Number, default: 0 },
     shippingMethod: {
