@@ -358,3 +358,59 @@
   font-style: italic;
   padding: var(--space-2) 0;
 }
+
+.orderCardInner {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.orderCardMain {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.orderCardQR {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  flex-shrink: 0;
+  padding: var(--space-2);
+  background-color: var(--color-bg-secondary, #f8fafc);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md);
+}
+
+.cardQRWrapper {
+  background: white;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+}
+
+.cardQRLabel {
+  font-size: 9px;
+  font-weight: var(--fw-bold, 700);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 480px) {
+  .orderCardInner {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .orderCardQR {
+    align-self: center;
+    margin-bottom: var(--space-3);
+  }
+}

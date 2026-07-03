@@ -37,42 +37,53 @@ function OrderCard({ order }) {
 
   return (
     <div className={styles.orderCard}>
-      <div className={styles.orderTop}>
-        <div>
-          <p className={styles.orderId}>#{orderId ? orderId.slice(-8).toUpperCase() : ''}</p>
-          <p className={styles.orderDate}>{formatDate(createdAt)}</p>
+      <div className={styles.orderCardInner}>
+        <div className={styles.orderCardMain}>
+          <div className={styles.orderTop}>
+            <div>
+              <p className={styles.orderId}>#{orderId ? orderId.slice(-8).toUpperCase() : ''}</p>
+              <p className={styles.orderDate}>{formatDate(createdAt)}</p>
+            </div>
+            <Badge variant={status}>{t(`orders.status.${status}`) || status}</Badge>
+          </div>
+
+          <div className={styles.orderMeta}>
+            <span className={styles.metaItem}>
+              {t('orders.itemsLabel', { count: itemCount })}
+            </span>
+            <span className={styles.metaDot} aria-hidden="true">·</span>
+            <span className={styles.metaItem}>{formatPrice(totalAmount)}</span>
+          </div>
+
+          {/* Items list */}
+          <div className={styles.itemsListContainer}>
+            {products.length > 0 && (
+              <ul className={styles.itemNames}>
+                {products.map((p, i) => (
+                  <li key={i}>
+                    {p.product?.name || t('orders.itemFallback')} × {p.quantity}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {packs.length > 0 && (
+              <ul className={styles.itemNames}>
+                {packs.map((p, i) => (
+                  <li key={i}>
+                    {p.pack?.name || t('orders.packFallback')} × {p.quantity}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
-        <Badge variant={status}>{t(`orders.status.${status}`) || status}</Badge>
-      </div>
 
-      <div className={styles.orderMeta}>
-        <span className={styles.metaItem}>
-          {t('orders.itemsLabel', { count: itemCount })}
-        </span>
-        <span className={styles.metaDot} aria-hidden="true">·</span>
-        <span className={styles.metaItem}>{formatPrice(totalAmount)}</span>
-      </div>
-
-      {/* Items list */}
-      <div className={styles.itemsListContainer}>
-        {products.length > 0 && (
-          <ul className={styles.itemNames}>
-            {products.map((p, i) => (
-              <li key={i}>
-                {p.product?.name || t('orders.itemFallback')} × {p.quantity}
-              </li>
-            ))}
-          </ul>
-        )}
-        {packs.length > 0 && (
-          <ul className={styles.itemNames}>
-            {packs.map((p, i) => (
-              <li key={i}>
-                {p.pack?.name || t('orders.packFallback')} × {p.quantity}
-              </li>
-            ))}
-          </ul>
-        )}
+        <div className={styles.orderCardQR}>
+          <div className={styles.cardQRWrapper}>
+            <QRCodeSVG value={`${window.location.origin}/orders/${orderId}`} size={64} />
+          </div>
+          <span className={styles.cardQRLabel}>Track Order</span>
+        </div>
       </div>
 
       {/* Tracking / Shipping Section */}
