@@ -649,10 +649,10 @@ exports.getMyOrders = catchAsync(async (req, res, next) => {
     if (req.user.phoneNumber) {
       queryConditions.push({ phoneNumber: req.user.phoneNumber });
     }
-    CustomerOrders = await Order.find({ $or: queryConditions });
+    CustomerOrders = await Order.find({ $or: queryConditions }).sort({ createdAt: -1 });
   } else {
     // Guest checkout → match by phone number
-    CustomerOrders = await Order.find({ phoneNumber: req.body.phoneNumber });
+    CustomerOrders = await Order.find({ phoneNumber: req.body.phoneNumber }).sort({ createdAt: -1 });
   }
 
   // Transform orders for customer view
