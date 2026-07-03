@@ -12,7 +12,17 @@ const ShippingService = require('../utils/shippingService');
 const ocpay = new OCPay(process.env.ONECLICK_API_KEY);
 
 exports.getOrder = factory.getOne(Order);
-exports.getOrders = factory.getAll(Order);
+exports.getOrders = catchAsync(async (req, res, next) => {
+  // Auto-delete pending card/dahabia orders older than 15 minutes
+  const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+  await Order.deleteMany({
+    paymentMethod: { $in: ['dahabia', 'cib'] },
+    status: 'pending',
+    createdAt: { $lt: fifteenMinutesAgo }
+  });
+
+  return factory.getAll(Order)(req, res, next);
+});
 exports.deleteOrder = factory.deleteOne(Order);
 
 // ─── GET /api/v1/orders/shipping-fee ─────────────────────────────────────────
@@ -579,6 +589,14 @@ exports.createOrder = catchAsync(async (req, res, next) => {
 });
 
 exports.getMyOrders = catchAsync(async (req, res, next) => {
+  // Auto-delete pending card/dahabia orders older than 15 minutes
+  const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+  await Order.deleteMany({
+    paymentMethod: { $in: ['dahabia', 'cib'] },
+    status: 'pending',
+    createdAt: { $lt: fifteenMinutesAgo }
+  });
+
   let CustomerOrders;
 
   if (req.user) {
@@ -630,7 +648,14 @@ exports.checkPaymentStatus = catchAsync(async (req, res, next) => {
   const order = await Order.findById(req.params.id);
 
   if (!order) {
-    return next(new AppError('No order found with that ID', 404));
+    // Return cancelled status instead of 404 so user sees a clean "Payment Failed" page
+    return res.status(200).json({
+      status: 'success',
+      data: { 
+        orderStatus: 'cancelled',
+        navioStatus: 'FAILED',
+      },
+    });
   }
 
   // If cash or already processed, return current status directly
@@ -666,14 +691,13 @@ exports.checkPaymentStatus = catchAsync(async (req, res, next) => {
         console.error('Telegram notification failed:', err.message)
       );
     } else if (navioStatus === PaymentStatus.FAILED) {
-      order.status = 'cancelled';
-      await order.save();
+      await Order.findByIdAndDelete(order._id);
     }
 
     res.status(200).json({
       status: 'success',
       data: {
-        orderStatus: order.status,
+        orderStatus: navioStatus === PaymentStatus.FAILED ? 'cancelled' : order.status,
         navioStatus,
       },
     });
