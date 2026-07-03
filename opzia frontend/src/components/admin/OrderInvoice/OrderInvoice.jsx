@@ -1,5 +1,6 @@
 // src/components/admin/OrderInvoice/OrderInvoice.jsx
 import React, { useState, useMemo } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import { orderService } from '@services/orderService';
 import { useUI } from '@hooks/useUI';
 import { useLanguage } from '@hooks/useLanguage';
@@ -18,6 +19,21 @@ function OrderInvoice({ order: initialOrder, onStatusUpdated, onClose }) {
   const [selectedProvider, setSelectedProvider] = useState(initialOrder.shipping?.provider || 'yalidine');
   // Allow local update of tracking data after sendToYalidine
   const [order, setOrder]                   = useState(initialOrder);
+
+  const qrValue = useMemo(() => {
+    const trackingCode = order?.shipping?.trackingNumber || order?.yalidineTracking;
+    const provider = order?.shipping?.provider || 'yalidine';
+
+    if (trackingCode) {
+      if (provider === 'yalidine') {
+        return `https://yalidine.com/tracking/?num=${trackingCode}`;
+      }
+      return trackingCode;
+    }
+
+    const baseUrl = window.location.origin || 'https://opzia.com';
+    return `${baseUrl}/orders/${order?._id || order?.id}`;
+  }, [order]);
 
   const statusOptions = useMemo(() => {
     const isPaidOnline = ['cib', 'dahabia'].includes(order?.paymentMethod);
@@ -443,6 +459,19 @@ function OrderInvoice({ order: initialOrder, onStatusUpdated, onClose }) {
 
         {/* Totals Section */}
         <div className={styles.totalsWrap}>
+          <div className={styles.qrContainer}>
+            <div className={styles.qrCodeBox}>
+              <QRCodeSVG value={qrValue} size={80} />
+            </div>
+            <div className={styles.qrInfo}>
+              <p className={styles.qrTitle}>Scan to Track</p>
+              <p className={styles.qrText}>
+                {order.yalidineTracking || order.shipping?.trackingNumber
+                  ? 'Official Carrier Status'
+                  : 'Opzia Store Status'}
+              </p>
+            </div>
+          </div>
           <div className={styles.totalsContent}>
             <div className={styles.totalRow}>
               <span>{t('admin.orderDetail.subtotal')}:</span>

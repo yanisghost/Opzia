@@ -1,5 +1,6 @@
 // src/pages/account/MyOrdersPage/MyOrdersPage.jsx
 import React, { useState, useEffect, useCallback } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '@hooks/useAuth';
 import { useLanguage } from '@hooks/useLanguage';
@@ -103,27 +104,42 @@ function OrderCard({ order }) {
             <div className={styles.timelineHeader}>
               <span>Status: <strong>{latestShippingStatus}</strong></span>
             </div>
-            {history.length > 0 ? (
-              <div className={styles.timelineList}>
-                {history.map((step, idx) => (
-                  <div key={idx} className={styles.timelineItem}>
-                    <div className={styles.timelineMarker}></div>
-                    <div className={styles.timelineContent}>
-                      <div className={styles.stepTitleRow}>
-                        <span className={styles.stepStatus}>{step.status}</span>
-                        <span className={styles.stepTime}>{new Date(step.timestamp).toLocaleDateString()}</span>
+
+            <div className={styles.timelineContentWrapper}>
+              <div className={styles.qrColumn}>
+                <div className={styles.qrWrapper}>
+                  <QRCodeSVG 
+                    value={carrierName === 'Yalidine' ? `https://yalidine.com/tracking/?num=${trackingCode}` : trackingCode} 
+                    size={80} 
+                  />
+                </div>
+                <span className={styles.qrLabel}>Scan to Track</span>
+              </div>
+
+              <div className={styles.timelineListColumn}>
+                {history.length > 0 ? (
+                  <div className={styles.timelineList}>
+                    {history.map((step, idx) => (
+                      <div key={idx} className={styles.timelineItem}>
+                        <div className={styles.timelineMarker}></div>
+                        <div className={styles.timelineContent}>
+                          <div className={styles.stepTitleRow}>
+                            <span className={styles.stepStatus}>{step.status}</span>
+                            <span className={styles.stepTime}>{new Date(step.timestamp).toLocaleDateString()}</span>
+                          </div>
+                          {step.location && <span className={styles.stepLoc}>📍 {step.location}</span>}
+                          {step.reason && <span className={styles.stepReason}>⚠ {step.reason}</span>}
+                        </div>
                       </div>
-                      {step.location && <span className={styles.stepLoc}>📍 {step.location}</span>}
-                      {step.reason && <span className={styles.stepReason}>⚠ {step.reason}</span>}
-                    </div>
+                    ))}
                   </div>
-                ))}
+                ) : (
+                  <div className={styles.timelineEmpty}>
+                    Parcel registered with carrier. Logistics steps will update once the shipment is processed.
+                  </div>
+                )}
               </div>
-            ) : (
-              <div className={styles.timelineEmpty}>
-                Parcel registered with carrier. Logistics steps will update once the shipment is processed.
-              </div>
-            )}
+            </div>
           </div>
         )}
       </div>

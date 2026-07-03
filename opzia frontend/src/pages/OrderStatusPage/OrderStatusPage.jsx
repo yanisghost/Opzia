@@ -1,5 +1,6 @@
 // src/pages/OrderStatusPage/OrderStatusPage.jsx
 import React, { useEffect, useState } from 'react';
+import { QRCodeSVG } from 'qrcode.react';
 import { useParams, Link } from 'react-router-dom';
 import { orderService } from '@services/orderService';
 import Button from '@components/ui/Button/Button';
@@ -74,6 +75,14 @@ function OrderStatusPage() {
             </div>
             <h2 className={styles.titleSuccess}>Payment Confirmed!</h2>
             <p className={styles.text}>Thank you! Your payment was successful and your order #{id} has been placed.</p>
+            
+            <div className={styles.qrStatusBox}>
+              <div className={styles.qrCodeWrapper}>
+                <QRCodeSVG value={`${window.location.origin}/orders/${id}`} size={110} />
+              </div>
+              <p className={styles.qrStatusHint}>Scan this code to save and track this order on your phone!</p>
+            </div>
+
             <div className={styles.actions}>
               <Link to="/shop">
                 <Button variant="primary" size="lg">Continue Shopping</Button>

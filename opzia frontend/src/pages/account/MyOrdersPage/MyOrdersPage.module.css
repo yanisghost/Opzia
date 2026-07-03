@@ -241,7 +241,53 @@
 .timelineHeader {
   font-size: var(--text-xs);
   color: var(--color-text-secondary);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-2);
+}
+
+.timelineContentWrapper {
+  display: flex;
+  gap: var(--space-6);
+  margin-top: var(--space-4);
+  align-items: flex-start;
+}
+
+.qrColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.qrWrapper {
+  background-color: #ffffff;
+  padding: var(--space-2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.qrLabel {
+  font-size: 10px;
+  font-weight: var(--fw-bold, 700);
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timelineListColumn {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (max-width: 500px) {
+  .timelineContentWrapper {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+  }
 }
 
 .timelineList {

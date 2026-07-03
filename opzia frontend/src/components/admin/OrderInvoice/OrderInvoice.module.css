@@ -311,8 +311,52 @@
 /* Totals Section */
 .totalsWrap {
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: flex-end;
   margin-top: var(--space-4);
+  gap: var(--space-6);
+}
+
+.qrContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  background-color: var(--color-bg-secondary, #f8fafc);
+  border: 1px solid var(--color-border, #e2e8f0);
+  border-radius: var(--radius-md);
+  max-width: 320px;
+}
+
+.qrCodeBox {
+  background: white;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+}
+
+.qrInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.qrTitle {
+  font-size: var(--text-xs);
+  font-weight: var(--fw-bold, 700);
+  color: var(--color-text-primary);
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.qrText {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  margin: 0;
 }
 
 .totalsContent {
