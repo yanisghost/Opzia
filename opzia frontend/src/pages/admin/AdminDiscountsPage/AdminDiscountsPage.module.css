@@ -340,3 +340,35 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Tabs Switcher */
+.tabsContainer {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-6);
+  margin-bottom: var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-3);
+}
+
+.tabButton {
+  background: none;
+  border: none;
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-md);
+  transition: all var(--transition-fast);
+}
+
+.tabButton:hover {
+  background: var(--color-surface-muted);
+  color: var(--color-text-primary);
+}
+
+.tabButton.activeTab {
+  background: var(--color-primary, #6366f1);
+  color: #ffffff;
+}

@@ -11,7 +11,8 @@ import OrderConfirmationModal from '@components/checkout/OrderConfirmationModal/
 import styles from './CheckoutPage.module.css';
 
 function CheckoutPage() {
-  const [promoCode,      setPromoCode]      = useState('');
+  const [promoCode, setPromoCode] = useState('');
+  const [discountAmount, setDiscountAmount] = useState(0);
   const [confirmedOrder, setConfirmedOrder] = useState(null);
   const [showModal,      setShowModal]      = useState(false);
   // Shipping fee lifted up from CheckoutForm so OrderSummaryPanel can show it
@@ -55,7 +56,11 @@ function CheckoutPage() {
             <OrderSummaryPanel
               showItems={true}
               promoCode={promoCode}
-              onPromoApply={setPromoCode}
+              discountAmount={discountAmount}
+              onPromoApply={(code, discount) => {
+                setPromoCode(code);
+                setDiscountAmount(discount || 0);
+              }}
               shipping={shippingFee}
             />
           </div>

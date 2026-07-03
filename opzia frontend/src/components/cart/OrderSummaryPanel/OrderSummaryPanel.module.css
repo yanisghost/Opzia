@@ -148,3 +148,14 @@
   color: var(--color-brand);
   font-weight: var(--fw-medium);
 }
+
+.promoError {
+  margin: var(--space-2) 0 0 0;
+  font-size: var(--text-xs);
+  color: var(--color-danger-700);
+}
+
+.discountAmt {
+  color: var(--color-danger-700);
+  font-weight: var(--fw-semibold);
+}

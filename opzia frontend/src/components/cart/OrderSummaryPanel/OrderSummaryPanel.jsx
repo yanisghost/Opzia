@@ -2,30 +2,55 @@
 // Right-column summary box shown on BagPage and CheckoutPage.
 // Displays: line items (optional), subtotal, shipping note, promo, total.
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useCart } from '@hooks/useCart';
 import { useLanguage } from '@hooks/useLanguage';
 import { formatPrice } from '@utils/formatPrice';
 import { productImageUrl, packImageUrl } from '@utils/imageUrl';
+import { orderService } from '@services/orderService';
 import PromoCodeInput from '@components/common/PromoCodeInput/PromoCodeInput';
 import styles from './OrderSummaryPanel.module.css';
 
 function OrderSummaryPanel({
-  showItems    = false,
-  promoCode    = '',
+  showItems      = false,
+  promoCode      = '',
+  discountAmount = 0,
   onPromoApply,
-  shipping     = null,
+  shipping       = null,
 }) {
   const { t } = useLanguage();
   const { items, subtotal } = useCart();
+  const [isCheckingPromo, setIsCheckingPromo] = useState(false);
+  const [promoError, setPromoError] = useState('');
 
   // shipping is the raw DZD number from Yalidine (null = not yet calculated)
   const hasShipping = shipping != null && shipping > 0;
-  const shippingDisplay = hasShipping
-    ? `${shipping} DZD`
-    : t('summary.calculated');
 
-  const estimatedTotal = subtotal + (hasShipping ? 0 : 0); // products only; shipping is shown separately
+  const handleApplyPromo = async (code) => {
+    if (!code) {
+      // User removed the promo code
+      onPromoApply?.('', 0);
+      setPromoError('');
+      return;
+    }
+
+    setIsCheckingPromo(true);
+    setPromoError('');
+    try {
+      const result = await orderService.validateCoupon(code, subtotal);
+      if (result.valid) {
+        onPromoApply?.(code, result.discountAmount);
+      } else {
+        setPromoError(result.message || 'Invalid code.');
+      }
+    } catch (err) {
+      setPromoError(err.message || 'Failed to apply coupon.');
+    } finally {
+      setIsCheckingPromo(false);
+    }
+  };
+
+  const grandTotal = Math.max(0, subtotal + (hasShipping ? shipping : 0) - discountAmount);
 
   return (
     <div className={styles.panel}>
@@ -66,7 +91,12 @@ function OrderSummaryPanel({
       {/* ── Promo Code ── */}
       {onPromoApply && (
         <div className={styles.promoRow}>
-          <PromoCodeInput onApply={onPromoApply} appliedCode={promoCode} />
+          <PromoCodeInput
+            onApply={handleApplyPromo}
+            appliedCode={promoCode}
+            isLoading={isCheckingPromo}
+          />
+          {promoError && <p className={styles.promoError}>{promoError}</p>}
         </div>
       )}
 
@@ -85,11 +115,20 @@ function OrderSummaryPanel({
             {hasShipping ? formatPrice(shipping) : t('summary.calculated')}
           </span>
         </div>
+        {discountAmount > 0 && (
+          <div className={[styles.totalRow, styles.discountRow].join(' ')}>
+            <span>Discount</span>
+            <span className={styles.discountAmt}>
+              - <small className={styles.currency}>USD</small>
+              {formatPrice(discountAmount)}
+            </span>
+          </div>
+        )}
         <div className={[styles.totalRow, styles.grandTotal].join(' ')}>
           <span>{t('summary.total')}</span>
           <span>
             <small className={styles.currency}>USD</small>
-            {formatPrice(subtotal + (hasShipping ? shipping : 0))}
+            {formatPrice(grandTotal)}
           </span>
         </div>
       </div>

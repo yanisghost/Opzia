@@ -179,6 +179,7 @@ function CheckoutForm({ promoCode = "", onSuccess, onShippingFeeChange }) {
       // Anti-spam verification fields
       middleName: form.middleName?.trim() || "",
       robotVerified: isRobotChecked,
+      promoCode: promoCode || undefined,
     };
 
     if (import.meta.env.DEV) {

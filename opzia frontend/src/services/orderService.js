@@ -107,6 +107,16 @@ export const orderService = {
     const res = await apiClient.get(`${BASE}/track-by-phone`, { params: { phone } });
     return res.data?.data?.orders ?? res.data?.orders ?? res.data;
   },
+
+  /**
+   * Validate order coupon promo code.
+   */
+  async validateCoupon(code, subtotal) {
+    const res = await apiClient.get('/coupons/validate', {
+      params: { code, subtotal },
+    });
+    return res.data?.data ?? res.data;
+  },
 };
 
 
