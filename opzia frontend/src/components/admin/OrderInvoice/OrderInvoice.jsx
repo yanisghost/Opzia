@@ -463,10 +463,27 @@ function OrderInvoice({ order: initialOrder, onStatusUpdated, onClose }) {
             </div>
           </div>
           <div className={styles.totalsContent}>
-            <div className={styles.totalRow}>
-              <span>{t('admin.orderDetail.subtotal')}:</span>
-              <span>${((order.totalAmount || 0) - (order.shippingFee || 0)).toFixed(2)}</span>
-            </div>
+            {order.couponDiscount > 0 ? (
+              <>
+                <div className={styles.totalRow}>
+                  <span>{t('admin.orderDetail.subtotal')}:</span>
+                  <span>${((order.totalAmount || 0) - (order.shippingFee || 0) + (order.couponDiscount || 0)).toFixed(2)}</span>
+                </div>
+                <div className={styles.totalRow}>
+                  <span style={{ color: 'var(--color-success, #10b981)', fontWeight: 'bold' }}>
+                    Coupon ({order.couponCode}):
+                  </span>
+                  <span style={{ color: 'var(--color-success, #10b981)', fontWeight: 'bold' }}>
+                    -${(order.couponDiscount || 0).toFixed(2)}
+                  </span>
+                </div>
+              </>
+            ) : (
+              <div className={styles.totalRow}>
+                <span>{t('admin.orderDetail.subtotal')}:</span>
+                <span>${((order.totalAmount || 0) - (order.shippingFee || 0)).toFixed(2)}</span>
+              </div>
+            )}
             {order.shippingFee > 0 ? (
               <div className={styles.totalRow}>
                 <span>{t('admin.orderDetail.shipping')} ({order.shippingMethod === 'stopdesk' ? 'Stopdesk' : 'Home'}):</span>
