@@ -91,39 +91,6 @@ exports.updateOrder = catchAsync(async (req, res, next) => {
     runValidators: true,
   });
 
-  // Auto-create parcel when order is confirmed (and no tracking yet)
-  if (
-    req.body.status === 'confirmed' &&
-    !order.yalidineTracking
-  ) {
-    try {
-      const provider = order.shipping?.provider || 'yalidine';
-      const result = await ShippingService.createParcel(provider, order);
-      
-      order.yalidineTracking = result.tracking;
-      order.yalidineStatus = 'En préparation';
-      order.yalidineLabelUrl = result.label;
-      
-      order.shipping.trackingNumber = result.tracking;
-      order.shipping.status = 'En préparation';
-      order.shipping.labelUrl = result.label;
-      order.shipping.history = [
-        {
-          status: 'En préparation',
-          location: order.wilaya,
-          reason: '',
-          timestamp: new Date(),
-        },
-      ];
-      
-      await order.save({ validateBeforeSave: false });
-      console.log(`[Shipping] Auto parcel created via ${provider}: ${result.tracking}`);
-    } catch (err) {
-      // Non-fatal — log but don't fail the order update
-      console.error('[Shipping] Auto parcel creation failed:', err.message);
-    }
-  }
-
   res.status(200).json({
     status: 'success',
     data: { order },
