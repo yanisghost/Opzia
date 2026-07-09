@@ -23,7 +23,7 @@ const upload = multer({
 // Middleware: upload single cover + multiple images
 exports.uploadProductImages = upload.fields([
   { name: 'imageCover', maxCount: 1 },
-  { name: 'images', maxCount: 3 },
+  { name: 'images', maxCount: 8 },
 ]);
 
 // 2. Image processing with sharp

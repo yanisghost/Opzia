@@ -149,5 +149,33 @@ productSchema.pre('save', function () {
   this.slug = slugify(this.name, { lower: true });
 });
 
+// ✅ POST-DELETE MIDDLEWARE: clean up image files from filesystem
+productSchema.post('findOneAndDelete', async function (doc) {
+  if (doc) {
+    const fs = require('fs');
+    const path = require('path');
+
+    if (doc.imageCover) {
+      const coverPath = path.join(__dirname, '..', 'public', 'img', 'products', doc.imageCover);
+      fs.unlink(coverPath, (err) => {
+        if (err && err.code !== 'ENOENT') {
+          console.error(`Error deleting product cover image ${doc.imageCover}: ${err.message}`);
+        }
+      });
+    }
+
+    if (doc.images && doc.images.length > 0) {
+      doc.images.forEach((img) => {
+        const imgPath = path.join(__dirname, '..', 'public', 'img', 'products', img);
+        fs.unlink(imgPath, (err) => {
+          if (err && err.code !== 'ENOENT') {
+            console.error(`Error deleting product gallery image ${img}: ${err.message}`);
+          }
+        });
+      });
+    }
+  }
+});
+
 const Product = mongoose.model('Product', productSchema);
 module.exports = Product;

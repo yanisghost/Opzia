@@ -140,5 +140,33 @@ packSchema.pre('save', function () {
   );
 });
 
+// ✅ POST-DELETE MIDDLEWARE: clean up image files from filesystem
+packSchema.post('findOneAndDelete', async function (doc) {
+  if (doc) {
+    const fs = require('fs');
+    const path = require('path');
+
+    if (doc.imageCover) {
+      const coverPath = path.join(__dirname, '..', 'public', 'img', 'packs', doc.imageCover);
+      fs.unlink(coverPath, (err) => {
+        if (err && err.code !== 'ENOENT') {
+          console.error(`Error deleting pack cover image ${doc.imageCover}: ${err.message}`);
+        }
+      });
+    }
+
+    if (doc.images && doc.images.length > 0) {
+      doc.images.forEach((img) => {
+        const imgPath = path.join(__dirname, '..', 'public', 'img', 'packs', img);
+        fs.unlink(imgPath, (err) => {
+          if (err && err.code !== 'ENOENT') {
+            console.error(`Error deleting pack gallery image ${img}: ${err.message}`);
+          }
+        });
+      });
+    }
+  }
+});
+
 const Pack = mongoose.model('Pack', packSchema);
 module.exports = Pack;

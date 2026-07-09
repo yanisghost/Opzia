@@ -179,7 +179,7 @@ function AdminProductsPage() {
   };
 
   const handleImagesChange = (e) => {
-    const files = Array.from(e.target.files || []).slice(0, 3);
+    const files = Array.from(e.target.files || []).slice(0, 8);
     setImagesFiles(files);
     setPreviewImagesUrls(files.map((file) => URL.createObjectURL(file)));
   };

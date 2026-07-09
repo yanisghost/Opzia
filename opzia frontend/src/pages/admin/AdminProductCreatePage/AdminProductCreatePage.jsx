@@ -72,7 +72,7 @@ function AdminProductCreatePage() {
   };
 
   const handleImagesChange = (event) => {
-    const files = Array.from(event.target.files || []).slice(0, 3);
+    const files = Array.from(event.target.files || []).slice(0, 8);
     setImages(files);
   };
 
