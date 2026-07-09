@@ -113,7 +113,13 @@ export default {
     priceHighLow: "Prix : du plus cher au moins cher",
     loading: "Chargement des produits...",
     error: "Impossible de charger les produits.",
-    empty: "Aucun produit ne correspond à votre recherche."
+    empty: "Aucun produit ne correspond à votre recherche.",
+    showType: "Afficher",
+    products: "Produits",
+    packs: "Packs & Coffrets",
+    filters: "Filtres",
+    clearAll: "Effacer tout",
+    apply: "Appliquer"
   },
   product: {
     addToCart: "AJOUTER AU PANIER",

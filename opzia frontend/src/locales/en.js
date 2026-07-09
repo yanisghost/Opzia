@@ -113,7 +113,13 @@ export default {
     priceHighLow: "Price: High to Low",
     loading: "Loading products...",
     error: "Could not load products.",
-    empty: "No products found matching your search."
+    empty: "No products found matching your search.",
+    showType: "Show Type",
+    products: "Products",
+    packs: "Packs & Bundles",
+    filters: "Filters",
+    clearAll: "Clear All",
+    apply: "Apply"
   },
   product: {
     addToCart: "ADD TO CART",

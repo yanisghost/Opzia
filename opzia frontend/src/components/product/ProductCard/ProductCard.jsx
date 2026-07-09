@@ -11,7 +11,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "@hooks/useCart";
 import { useUI } from "@hooks/useUI";
-import { productImageUrl } from "@utils/imageUrl";
+import { productImageUrl, packImageUrl } from "@utils/imageUrl";
 import { formatPrice, calcDiscountPercent } from "@utils/formatPrice";
 import styles from "./ProductCard.module.css";
 
@@ -21,26 +21,32 @@ function ProductCard({ product, categoriesMap = null }) {
 
   if (!product) return null;
 
+  const isPack = product.packPrice !== undefined || product.isPack;
+
   const {
     _id,
     name,
     category, // populated object or string
-    price,
-    finalPrice, // backend virtual — equals price when no active discount
     imageCover,
-    stock,
   } = product;
+
+  const price = isPack ? product.packPrice : product.price;
+  const finalPrice = product.finalPrice ?? price;
+  const stock = isPack ? 999 : product.stock;
 
   const isObjectId = (val) =>
     typeof val === "string" && /^[0-9a-fA-F]{24}$/.test(val);
-  const categoryName =
-    typeof category === "object"
+
+  const categoryName = isPack
+    ? "Pack"
+    : typeof category === "object"
       ? category?.name
       : categoriesMap && categoriesMap[category]
         ? categoriesMap[category]
         : isObjectId(category)
           ? ""
           : category;
+
   const hasDiscount = finalPrice != null && finalPrice < price;
   const displayPrice = finalPrice ?? price;
   const isOutOfStock = stock != null && stock === 0;
@@ -51,7 +57,7 @@ function ProductCard({ product, categoriesMap = null }) {
     e.stopPropagation();
     addItem({
       id: _id,
-      type: "product",
+      type: isPack ? "pack" : "product",
       name,
       price: displayPrice,
       originalPrice: price,
@@ -64,10 +70,10 @@ function ProductCard({ product, categoriesMap = null }) {
 
   return (
     <article className={[styles.card, isOutOfStock ? styles.outOfStock : ""].filter(Boolean).join(" ")}>
-      <Link to={`/shop/${_id}`} className={styles.imageLink} aria-label={name}>
+      <Link to={isPack ? `/packs/${_id}` : `/shop/${_id}`} className={styles.imageLink} aria-label={name}>
         <div className={styles.imageWrap}>
           <img
-            src={productImageUrl(imageCover)}
+            src={isPack ? packImageUrl(imageCover) : productImageUrl(imageCover)}
             alt={name}
             className={styles.image}
             loading="lazy"
@@ -102,7 +108,7 @@ function ProductCard({ product, categoriesMap = null }) {
 
       <div className={styles.info}>
         {categoryName && <p className={styles.category}>{categoryName}</p>}
-        <Link to={`/shop/${_id}`} className={styles.name}>
+        <Link to={isPack ? `/packs/${_id}` : `/shop/${_id}`} className={styles.name}>
           {name}
         </Link>
         <div className={styles.pricing}>
